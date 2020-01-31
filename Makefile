@@ -10,7 +10,8 @@ EXEC_PUBKEY 	=	pubKey
 SRC_PUBKEY	=	$(addprefix src/, \
 					main.c \
 					secp256k1.c \
-					modinv.c)
+					modinv.c \
+					ECdouble.c)
 OBJ_PUBKEY	=	$(SRC_PUBKEY:.c=.o)
 
 

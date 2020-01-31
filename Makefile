@@ -1,5 +1,5 @@
 export CC		=	gcc
-export CFLAGS	=	-Iinclude -Ilib
+export CFLAGS	=	-Iinclude -Ilib -g3
 export REMOVE 	=	rm -f
 
 LDFLAGS	=	-Llib/ -lgmp
@@ -9,7 +9,8 @@ EXEC_DIR	=	bin/
 EXEC_PUBKEY 	=	pubKey
 SRC_PUBKEY	=	$(addprefix src/, \
 					main.c \
-					secp256k1.c)
+					secp256k1.c \
+					modinv.c)
 OBJ_PUBKEY	=	$(SRC_PUBKEY:.c=.o)
 
 

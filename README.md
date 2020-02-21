@@ -31,12 +31,12 @@ make
 
 ### III. Run the project
 
-To get your public key you can run from the root directory:
+To **get your public key** you can run from the root directory:
 ```sh
 ./bin/pubKey {privateKey}
 ```
 
-To get your Ethereum address you can run from the root directory:
+To **get your Ethereum address** you can run from the root directory:
 ```sh
 python3 ethAddr.py {publicKey}
 ```

@@ -5,10 +5,10 @@ void    init_secp256k1(secp256k1_s *secp256k1) {
     mpz_init_set_si(secp256k1->b, 7);
     mpz_init_set_str(secp256k1->p, "fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f", 16);
 
-    mpz_init_set_str(secp256k1->g.x, "79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798", 16);
-    mpz_init_set_str(secp256k1->g.y, "483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8", 16);
+    mpz_init_set_str(secp256k1->g.x, "79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798", 16);
+    mpz_init_set_str(secp256k1->g.y, "483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8", 16);
 
-    mpz_init_set_str(secp256k1->n, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 16);
+    mpz_init_set_str(secp256k1->n, "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141", 16);
 }
 
 void    clear_secp256k1(secp256k1_s secp256k1) {

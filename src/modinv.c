@@ -28,38 +28,22 @@ void    modinv(mpz_t value, mpz_t p, mpz_t res) {
 
     int cmp = -1;
 
-    // gmp_printf ("value: %Zd\n", value);
-    // gmp_printf ("p: %Zd\n", p);
-    // gmp_printf ("lm: %Zd\n", lm);
-    // gmp_printf ("hm: %Zd\n", hm);
-    // gmp_printf ("low: %Zd\n", low);
-    // gmp_printf ("high: %Zd\n", high);
-
     while ((cmp = mpz_cmp_si(low, 1)) > 0) {
         mpz_fdiv_q(ratio, high, low);
-        // gmp_printf ("ratio = %.10Zd\n", ratio);
 
         mpz_mul(zTmp1, lm, ratio);
         mpz_sub(nm, hm, zTmp1);
-        // gmp_printf ("nm = %.10Zd\n", nm);
 
         mpz_mul(zTmp1, low, ratio);
         mpz_sub(new, high, zTmp1);
-        // gmp_printf ("new = %Zd\n", new);
 
         mpz_set(high, low);
         mpz_set(hm, lm);
         mpz_set(low, new);
         mpz_set(lm, nm);
-        // gmp_printf ("lm: %Zd\n", lm);
-        // gmp_printf ("hm: %Zd\n", hm);
-        // gmp_printf ("low: %Zd\n", low);
-        // gmp_printf ("high: %Zd\n", high);
     }
     mpz_fdiv_r(res, lm, p);
-    // gmp_printf ("lm: %Zd\n", lm);
-    // gmp_printf ("p: %Zd\n", p);
-    // gmp_printf ("res: %Zd\n", res);
+
     mpz_clear(zTmp1);
     mpz_clear(lm);
     mpz_clear(hm);

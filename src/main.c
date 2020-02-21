@@ -2,62 +2,73 @@
 #include "secp256k1.h"
 #include "ECdouble.h"
 #include "ECadd.h"
+#include "ECmultiply.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 
-int main(void) {
+void    printPubKey(point_s pubKey) {
+    char *x = malloc(sizeof(char) * (mpz_sizeinbase(pubKey.x, 16) + 2));
+    char *y = malloc(sizeof(char) * (mpz_sizeinbase(pubKey.y, 16) + 2));
+    mpz_get_str(x, 16, pubKey.x);
+    mpz_get_str(y, 16, pubKey.y);
+
+    int pubKeyLen = strlen(x) + strlen(y);
+
+    printf("Your public key is:\n0x");
+    for (int i = 128 - pubKeyLen; i > 0; i--) {
+        printf("0");
+    }
+    gmp_printf("%Zx%Zx\n", pubKey.x, pubKey.y);
+
+    free(x);
+    free(y);
+}
+
+bool    isPrivKey(char *privKey) {
+    if (strlen(privKey) != 64) {
+        fprintf(stderr, "Invalid length of private key, expected 32 bytes length without '0x' prefix\n");
+        return false;
+    }
+
+    for (int i = 0; i < strlen(privKey); i++) {
+        if (isxdigit(privKey[i]) == 0) {
+            fprintf(stderr, "Invalid private key\n");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int main(int ac, char **av) {
     secp256k1_s secp256k1;
-    // mpz_t r;
-    point_s p;
-    point_s q;
-    mpz_t zTmp1;
-    mpz_t zTmp2;
-    mpz_t zTmp3;
-    mpz_init_set_si(zTmp1, 0);
-    mpz_init_set_si(zTmp2, 0);
-    mpz_init_set_si(zTmp3, 0);
+    mpz_t privKey;
+    point_s pubKey;
+
+    if (ac != 2) {
+        fprintf(stderr, "Please use: %s yourPrivateKey\n", av[0]);
+        return 1;
+    }
+
+    if (isPrivKey(av[1]) == false) {
+        return 1;
+    }
 
     init_secp256k1(&secp256k1);
-    // dump_secp256k1(secp256k1);
+    mpz_init_set_str(privKey, av[1], 16);
 
-    // mpz_init_set_si(r, 1);
-    // modinv(secp256k1.g.x, secp256k1.p, r);
-    // gmp_printf("r = %Zd\n", r);
+    pubKey = elliptic_curve_multiply(secp256k1, privKey);
 
-    p = elliptic_curve_point_double(secp256k1.g, secp256k1);
-    // gmp_printf("p.x = %Zd\n", p.x);
-    // gmp_printf("p.y = %Zd\n", p.y);
-
-    q = elliptic_curve_point_add(secp256k1.g, p, secp256k1);
-    // gmp_printf("q.x = %Zd\n", q.x);
-    // gmp_printf("q.y = %Zd\n", q.y);
-
-    // mpz_mul(zTmp1, p.x, p.x);
-    // mpz_mul(zTmp2, zTmp1, p.x);
-    // mpz_add(zTmp1, zTmp2, secp256k1.b);
-    // mpz_mul(zTmp2, p.y, p.y);
-    // mpz_sub(zTmp3, zTmp1, zTmp2);
-    // mpz_fdiv_r(zTmp1, zTmp3, secp256k1.p);
-    // gmp_printf("0 = %Zd\n", zTmp1);
-
-    // mpz_mul(zTmp1, q.x, q.x);
-    // mpz_mul(zTmp2, zTmp1, q.x);
-    // mpz_add(zTmp1, zTmp2, secp256k1.b);
-    // mpz_mul(zTmp2, q.y, q.y);
-    // mpz_sub(zTmp3, zTmp1, zTmp2);
-    // mpz_fdiv_r(zTmp1, zTmp3, secp256k1.p);
-    // gmp_printf("0 = %Zd\n", zTmp1);
+    printPubKey(pubKey);
 
     clear_secp256k1(secp256k1);
-    // mpz_clear(r);
-    mpz_clear(zTmp1);
-    mpz_clear(zTmp2);
-    mpz_clear(zTmp3);
-    mpz_clear(p.x);
-    mpz_clear(p.y);
-    mpz_clear(q.x);
-    mpz_clear(q.y);
+    mpz_clear(privKey);
+    mpz_clear(pubKey.x);
+    mpz_clear(pubKey.y);
 
     return 0;
 }

@@ -40,7 +40,3 @@ To **get your Ethereum address** you can run from the root directory:
 ```sh
 python3 ethAddr.py {publicKey}
 ```
-
-## TODO
-1. Add logo
-2. boyscoot
